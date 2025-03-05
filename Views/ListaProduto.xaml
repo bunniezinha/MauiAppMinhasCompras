@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiAppMinhasCompras.Views.ListaProduto">
+
+    <StackLayout Padding="20" VerticalOptions="FillAndExpand">
+
+        <Label Text="Lista de Produtos"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               TextColor="White"/>
+
+        <ListView x:Name="lstProdutos"
+                  ItemTapped="OnProdutoTapped"
+                  Margin="0,20,0,20">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Descricao}" Detail="{Binding Preco, StringFormat='R$ {0:N2}'}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Text="Novo Produto"
+                Clicked="OnNovoProduto"
+                BackgroundColor="#FFC0CB"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="20"
+                Padding="10"
+                HorizontalOptions="Center"
+                VerticalOptions="EndAndExpand"
+                WidthRequest="200"/>
+    </StackLayout>
+</ContentPage>
