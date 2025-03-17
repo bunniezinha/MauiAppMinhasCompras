@@ -8,6 +8,8 @@ namespace MauiAppMinhasCompras.Views
 {
     public partial class ListaProduto : ContentPage
     {
+        private List<Produto> produtos;
+
         public ListaProduto()
         {
             InitializeComponent();
@@ -21,7 +23,9 @@ namespace MauiAppMinhasCompras.Views
 
         async Task LoadProdutos()
         {
-            lstProdutos.ItemsSource = await App.Db.GetAll();
+            produtos = await App.Db.GetAll();
+            lstProdutos.ItemsSource = produtos;
+            
         }
 
         async void OnNovoProduto(object sender, EventArgs e)
@@ -34,6 +38,22 @@ namespace MauiAppMinhasCompras.Views
             if (e.Item is Produto produto)
             {
                 await Navigation.PushAsync(new EditarProduto(produto));
+            }
+        }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            string filtro = e.NewTextValue?.ToLower() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(filtro))
+            {
+                lstProdutos.ItemsSource = produtos; // Sem filtro, exibe tudo
+            }
+            else
+            {
+                lstProdutos.ItemsSource = produtos
+                    .Where(p => p.Descricao.ToLower().Contains(filtro))
+                    .ToList();
             }
         }
     }

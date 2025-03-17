@@ -12,6 +12,10 @@
                VerticalOptions="Start"
                TextColor="White"/>
 
+        <SearchBar x:Name="searchBar" 
+                   Placeholder="Buscar produto..."
+                   TextChanged="OnSearchTextChanged"/>
+
         <ListView x:Name="lstProdutos"
                   ItemTapped="OnProdutoTapped"
                   Margin="0,20,0,20">
