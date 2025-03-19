@@ -24,31 +24,45 @@ namespace MauiAppMinhasCompras.Views
 
         async void OnSalvarAlteracoes(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtDescricao.Text) ||
-                string.IsNullOrWhiteSpace(txtQuantidade.Text) ||
-                string.IsNullOrWhiteSpace(txtPreco.Text))
+            try
             {
-                await DisplayAlert("Erro", "Preencha todos os campos!", "OK");
-                return;
+                if (string.IsNullOrWhiteSpace(txtDescricao.Text) ||
+                    string.IsNullOrWhiteSpace(txtQuantidade.Text) ||
+                    string.IsNullOrWhiteSpace(txtPreco.Text))
+                {
+                    await DisplayAlert("Erro", "Preencha todos os campos!", "OK");
+                    return;
+                }
+
+                _produto.Descricao = txtDescricao.Text;
+                _produto.Quantidade = Convert.ToDouble(txtQuantidade.Text);
+                _produto.Preco = Convert.ToDouble(txtPreco.Text);
+
+                await App.Db.Update(_produto);
+                await DisplayAlert("Sucesso", "Produto atualizado!", "OK");
+                await Navigation.PopAsync();
             }
-
-            _produto.Descricao = txtDescricao.Text;
-            _produto.Quantidade = Convert.ToDouble(txtQuantidade.Text);
-            _produto.Preco = Convert.ToDouble(txtPreco.Text);
-
-            await App.Db.Update(_produto);
-            await DisplayAlert("Sucesso", "Produto atualizado!", "OK");
-            await Navigation.PopAsync();
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Falha ao atualizar: {ex.Message}", "OK");
+            }
         }
 
         async void OnExcluirProduto(object sender, EventArgs e)
         {
-            bool confirmacao = await DisplayAlert("Confirmação", "Deseja excluir este produto?", "Sim", "Não");
-            if (confirmacao)
+            try
             {
-                await App.Db.Delete(_produto.Id);
-                await DisplayAlert("Sucesso", "Produto excluído!", "OK");
-                await Navigation.PopAsync();
+                bool confirmacao = await DisplayAlert("Confirmação", "Deseja excluir este produto?", "Sim", "Não");
+                if (confirmacao)
+                {
+                    await App.Db.Delete(_produto.Id);
+                    await DisplayAlert("Sucesso", "Produto excluído!", "OK");
+                    await Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Falha ao excluir: {ex.Message}", "OK");
             }
         }
     }

@@ -23,9 +23,15 @@ namespace MauiAppMinhasCompras.Views
 
         async Task LoadProdutos()
         {
-            produtos = await App.Db.GetAll();
-            lstProdutos.ItemsSource = produtos;
-            
+            try
+            {
+                produtos = await App.Db.GetAll();
+                lstProdutos.ItemsSource = produtos;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Não foi possível carregar os produtos: {ex.Message}", "OK");
+            }
         }
 
         async void OnNovoProduto(object sender, EventArgs e)
